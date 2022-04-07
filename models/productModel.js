@@ -68,6 +68,7 @@ const ProductSchema = new Schema(
     name: String,
     description: String,
     category: String,
+    quantity: Number,
     price: Number,
   },
   { collection: "products" }

@@ -106,7 +106,7 @@ const InsertManyProduct = async (req, res) => {
     const data = await Product.insertMany(req.body, arr);
     return res
       .status(200)
-      .send({ status: 200, message: "InserMany", data: data });
+      .send({ status: 200, message: "Insert Many", data: data });
   } catch (err) {
     return res.status(500).send({
       status: 500,
@@ -133,25 +133,36 @@ const UpdateMany = async (req, res) => {
     });
   }
 };
+const Aggregate = async (req, res) => {
+  try {
+    const data = await Product.aggregate([{ $match: { quantity: 2 } }]);
+    console.log(data);
+    return res
+      .status(200)
+      .send({ status: 200, message: "Aggregate  successfully", data });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-// const deleteMany = async (req, res) => {
-//   try {
-//     const deleteManydata = await Product.deleteMany({
-//       user_id: 1,
-//     });
-//     return res.status(200).send({
-//       status: 200,
-//       message: "Delete Many successfully",
-//       deleteManydata,
-//     });
-//   } catch (error) {
-//     return res.status(500).send({
-//       status: 500,
-//       message: "Something went wrong, please try again later!",
-//       error: err.message,
-//     });
-//   }
-// };
+const AggregatesMore = async (req, res) => {
+  try {
+    const data = await Product.aggregate(
+      [
+        { $match: { name: "sam" } },
+        {
+          $group: { _id: "$name", total: { $sum: "$price" } },
+        },
+      ],
+      req.body
+    );
+    return res
+      .status(200)
+      .send({ status: 200, message: "Aggregate  successfully", data });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
   createProduct,
@@ -161,5 +172,7 @@ module.exports = {
   deleteProduct,
   InsertManyProduct,
   UpdateMany,
+  Aggregate,
+  AggregatesMore,
   // deleteMany,
 };
